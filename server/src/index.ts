@@ -3,8 +3,8 @@ import mongoose, { ObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import { ContentModel, UserModel, TagsModel, LinkModel } from "./db";
-import { userMiddleware } from "./middleware";
+import { ContentModel, UserModel, TagsModel, LinkModel } from "../src/db";
+import { userMiddleware } from "../src/middleware";
 
 const app = express();
 app.use(express.json());
