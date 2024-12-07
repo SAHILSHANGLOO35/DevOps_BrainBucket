@@ -1,20 +1,21 @@
 import express, { Request, Response } from "express";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import { ContentModel, UserModel, TagsModel, LinkModel } from "../src/db";
 import { userMiddleware } from "../src/middleware";
+import { random } from "./utils";
 
 const app = express();
 app.use(express.json());
 
 interface AuthenticatedRequest extends Request {
-    userId?: string,
+    userId?: string;
     body: {
-        title: string,
-        link: string,
-    }
+        title: string;
+        link: string;
+    };
 }
 
 //@ts-ignore
@@ -59,58 +60,61 @@ app.post("/api/v1/signin", async (req, res) => {
 
         const user = await UserModel.findOne({ email });
 
-        if(!user) {
+        if (!user) {
             res.status(404).send({
-                message: "User not found"
+                message: "User not found",
             });
-            return
+            return;
         }
-        
-        const matchPassword = await bcrypt.compare(password, user.password as string);
 
-        if(matchPassword) {
+        const matchPassword = await bcrypt.compare(
+            password,
+            user.password as string
+        );
+
+        if (matchPassword) {
             const token = jwt.sign(
                 { id: user._id },
                 process.env.JWT_USER_SECRET as string // Force it to be treated as a string
             );
-        
+
             res.status(200).send({
                 token: token,
             });
         } else {
             res.status(403).send({
-                message: "Incorrect credentials!"
-            })
+                message: "Incorrect credentials!",
+            });
         }
-
     } catch (error) {
         res.status(404).send({
-            message: "Internal server error"
-        })
+            message: "Internal server error",
+        });
     }
 });
 
 // @ts-ignore
 app.post("/api/v1/content", userMiddleware, async (req: AuthenticatedRequest, res) => {
-    try {
-        const title = req.body.title;
-        const link = req.body.link;
+        try {
+            const title = req.body.title;
+            const link = req.body.link;
 
-        await ContentModel.create({
-            title,
-            link,
-            userId: req.userId,
-            tags: []
-        })
-        res.status(200).send({
-            message: "Content added successfully!"
-        })
-    } catch (error) {
-        res.status(403).send({
-            message: "Internal server error"
-        })
+            await ContentModel.create({
+                title,
+                link,
+                userId: req.userId,
+                tags: [],
+            });
+            res.status(200).send({
+                message: "Content added successfully!",
+            });
+        } catch (error) {
+            res.status(403).send({
+                message: "Internal server error",
+            });
+        }
     }
-});
+);
 
 // @ts-ignore
 app.get("/api/v1/content", userMiddleware, async (req, res) => {
@@ -118,16 +122,18 @@ app.get("/api/v1/content", userMiddleware, async (req, res) => {
         // @ts-ignore
         const userId = req.userId;
 
-        const content = await ContentModel.find({ userId })
-            .populate('userId', 'username');
+        const content = await ContentModel.find({ userId }).populate(
+            "userId",
+            "username"
+        );
 
         res.send({
-            content
-        })
+            content,
+        });
     } catch (error) {
         res.status(403).send({
-            messaage: "Internal server error"
-        })
+            messaage: "Internal server error",
+        });
     }
 });
 
@@ -137,18 +143,20 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
         const contentId = req.body.contentId;
         // @ts-ignore
         const userId = req.userId;
-    
+
         const content = await ContentModel.findOne({
-            contentId
+            _id: contentId,
         });
 
         if (!content) {
-            return res.status(404).send({ message: "No content found to delete" });
+            return res
+                .status(404)
+                .send({ message: "No content found to delete" });
         }
 
         const deleteContent = await ContentModel.deleteMany({
             contentId,
-            userId
+            userId,
         });
 
         res.status(200).send({
@@ -162,16 +170,79 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
     }
 });
 
-app.post("/api/v1/brain/share", (req, res) => {
+// @ts-ignore
+app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
+    const share = req.body.share;
 
+    if (share) {
+        const existingLink = await LinkModel.findOne({
+            // @ts-ignore
+            userId: req.userId
+        })
+
+        if(existingLink) {
+            res.send({
+                hash: existingLink.hash
+            })
+            return;
+        }
+
+        const hash = random(10);
+        await LinkModel.create({
+            // @ts-ignore
+            userId: req.userId,
+            hash: hash,
+        });
+        res.send({
+            hash: hash
+        });
+    } else {
+        await LinkModel.deleteOne({
+            // @ts-ignore
+            userId: req.userId,
+        });
+    }
+    res.send({
+        message: "Removed link",
+    });
 });
 
-app.get("/api/v1/brain/:shareLink", (req, res) => {});
+// @ts-ignore
+app.get("/api/v1/brain/:shareLink", async (req, res) => {
+    try {
+        const hash = req.params.shareLink;
+
+        const link = await LinkModel.findOne({
+            hash: hash,
+        });
+
+        if (!link) {
+            res.status(403).send({
+                message: "Sorry incorrect input",
+            });
+            return;
+        }
+        const content = await ContentModel.find({
+            userId: link.userId,
+        });
+
+        const user = await UserModel.findOne({
+            _id: link.userId,
+        });
+
+        res.status(200).send({
+            username: user?.username,
+            content: content,
+        });
+    } catch (error) {
+        res.status(403).send({
+            message: "Internal server error",
+        });
+    }
+});
 
 async function main() {
-    await mongoose.connect(
-        process.env.MONGODB_URI as string
-    );
+    await mongoose.connect(process.env.MONGODB_URI as string);
     app.listen(process.env.PORT, () => {
         console.log("SERVER STARTED ON PORT", process.env.PORT);
     });

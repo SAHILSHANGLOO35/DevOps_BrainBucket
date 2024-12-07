@@ -44,14 +44,12 @@ const tagsSchema = new mongoose.Schema({
 })
 
 const linkSchema = new mongoose.Schema({
-    hash: {
-        type: String,
-        required:true
-    },
+    hash: String,
     userId: {
         type : mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        unique: true
     }
 })
 
