@@ -223,6 +223,7 @@ app.get("/api/v1/brain/:shareLink", async (req, res) => {
             });
             return;
         }
+        // early return
         const content = await ContentModel.find({
             userId: link.userId,
         });
