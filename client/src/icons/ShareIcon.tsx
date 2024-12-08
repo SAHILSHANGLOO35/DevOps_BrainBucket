@@ -1,14 +1,14 @@
-interface ShareIconInterface {
-    size: "sm" | "md" | "lg"
-}
+// interface ShareIconInterface {
+//     size: "sm" | "md" | "lg"
+// }
 
-const sizeVariants = {
-    "sm": "size-2",
-    "md": "size-4",
-    "lg": "size-6",
-}
+// const sizeVariants = {
+//     "sm": "size-2",
+//     "md": "size-4",
+//     "lg": "size-6",
+// }
 
-export function ShareIcon(props: ShareIconInterface) {
+export function ShareIcon() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@ export function ShareIcon(props: ShareIconInterface) {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            className={sizeVariants[props.size]}
+            className="size-4"
         >
             <path
                 stroke-linecap="round"
