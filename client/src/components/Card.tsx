@@ -11,7 +11,7 @@ interface CardProps {
 export function Card({ title, link, type }: CardProps) {
     return (
         <div>
-            <div className="max-w-72 border rounded-md shadow-sm border-gray-200 bg-white p-4 min-h-48 min-w-72">
+            <div className="max-w-72 border rounded-md shadow-md border-gray-200 bg-white p-4 min-h-48 min-w-72" >
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <div className=" text-gray-500 pr-2">
