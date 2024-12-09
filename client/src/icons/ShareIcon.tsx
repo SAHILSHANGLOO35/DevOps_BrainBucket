@@ -1,13 +1,3 @@
-// interface ShareIconInterface {
-//     size: "sm" | "md" | "lg"
-// }
-
-// const sizeVariants = {
-//     "sm": "size-2",
-//     "md": "size-4",
-//     "lg": "size-6",
-// }
-
 export function ShareIcon() {
     return (
         <svg

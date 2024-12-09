@@ -5,8 +5,13 @@ export function SideBarItem({text, icon}: {
     icon: ReactElement
 }) {
     return (
-        <div className="flex gap-4 items-center px-6">
-            {icon} {text}
+        <div className="flex items-center hover:bg-gray-200 rounded cursor-pointer max-w-44 hover:pl-4 transition-all duration-300">
+            <div className="p-2 text-gray-500">
+                {icon}
+            </div>
+            <div className="p-2 text-gray-700">
+                {text}
+            </div> 
         </div>
     )
 }
