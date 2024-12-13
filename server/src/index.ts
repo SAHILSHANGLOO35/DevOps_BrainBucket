@@ -6,9 +6,11 @@ import bcrypt from "bcrypt";
 import { ContentModel, UserModel, TagsModel, LinkModel } from "../src/db";
 import { userMiddleware } from "../src/middleware";
 import { random } from "./utils";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 interface AuthenticatedRequest extends Request {
     userId?: string;

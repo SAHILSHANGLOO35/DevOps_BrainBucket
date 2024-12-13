@@ -7,7 +7,7 @@ import { SideBarItem } from "./SidebarItem";
 export function Sidebar() {
     return (
         <div className="h-screen bg-white border-r w-60 fixed left-0 top-0">
-            <div className="flex text-2xl items-center pl-4 gap-2 font-semibold pt-2">
+            <div className="flex text-2xl items-center pl-4 mt-3 mb-3 gap-2 font-semibold pt-2">
                 <div className="cursor-pointer">
                     <BrainIcon />
                 </div>

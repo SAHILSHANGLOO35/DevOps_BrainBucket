@@ -1,5 +1,6 @@
 import { CrossIcon } from "../icons/CrossIcon";
 import { Button } from "./Button";
+import { Input } from "./Input";
 
 // Controlled component
 export function CreateContentModal({ open, onClose }) {
@@ -28,27 +29,6 @@ export function CreateContentModal({ open, onClose }) {
                     </div>
                 </div>
             )}
-        </div>
-    );
-}
-
-export function Input({
-    onChange,
-    placeholder,
-    className
-}: {
-    placeholder: string;
-    onChange: () => void;
-    className?: string;
-}) {
-    return (
-        <div>
-            <input
-                type="text"
-                placeholder={placeholder}
-                className={`text-start py-2 border shadow rounded m-2 ${className || ""}`}
-                onChange={onChange}
-            />
         </div>
     );
 }
