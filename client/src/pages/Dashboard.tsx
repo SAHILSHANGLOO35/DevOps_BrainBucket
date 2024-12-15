@@ -42,12 +42,6 @@ export function Dashboard() {
                         link="https://x.com/SahilShangloo35/status/1865423830371700814"
                         title="My Twitter Post"
                     />
-
-                    <Card
-                        type="youtube"
-                        link="https://www.youtube.com/watch?v=Pm0Ga7R-vrM"
-                        title="My Youtube Playlist"
-                    />
                 </div>
             </div>
         </div>

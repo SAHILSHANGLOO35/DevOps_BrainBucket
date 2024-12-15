@@ -28,6 +28,7 @@ const contentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tags'
     }],
+    type: String,
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
