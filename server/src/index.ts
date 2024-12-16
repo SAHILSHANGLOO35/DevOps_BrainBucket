@@ -159,8 +159,8 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
                 .send({ message: "No content found to delete" });
         }
 
-        const deleteContent = await ContentModel.deleteMany({
-            contentId,
+        const deleteContent = await ContentModel.deleteOne({
+            _id: contentId,
             userId,
         });
 
