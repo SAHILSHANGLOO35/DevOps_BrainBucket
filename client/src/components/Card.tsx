@@ -1,4 +1,5 @@
-import { ShareIcon } from "../icons/ShareIcon";
+import { DeleteIcon } from "../icons/DeleteIcon";
+import { EyeIcon } from "../icons/EyeIcon";
 import { TwitterIcon } from "../icons/TwitterIcon";
 import { YoutubeIcon } from "../icons/YoutubeIcon";
 
@@ -21,10 +22,13 @@ export function Card({ title, link, type }: CardProps) {
                         {title}
                     </div>
                     <div className="flex items-center">
-                        <div className="text-gray-500 pr-2 cursor-pointer">
+                        <div className="text-gray-800 pr-2 cursor-pointer">
                             <a href={link} target="_blank">
-                                <ShareIcon />
+                                <EyeIcon />
                             </a>
+                        </div>
+                        <div className="text-gray-800 cursor-pointer">
+                            <DeleteIcon />
                         </div>
                     </div>
                 </div>

@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
 import { CreateContentModal } from "../components/CreateContentModal";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Sidebar } from "../components/Sidebar";
+import { useContent } from "../hooks/useContent";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 export function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false);
+    const { contents, refresh } = useContent();
+
+    useEffect(() => {
+        refresh();
+    }, [modalOpen]);
 
     return (
         <div>
@@ -30,18 +38,50 @@ export function Dashboard() {
                     />
 
                     <Button
+                        onClick={async () => {
+                            try {
+                                const response = await axios.post(
+                                    `${BACKEND_URL}/api/v1/brain/share`,
+                                    {
+                                        share: true,
+                                    },
+                                    {
+                                        headers: {
+                                            Authorization:
+                                                localStorage.getItem("token"),
+                                        },
+                                    }
+                                );
+                                const shareUrl = `http://localhost:5173/share/${response.data.hash}`;
+
+                                await navigator.clipboard.writeText(shareUrl);
+                                console.log(
+                                    "Content copied to clipboard",
+                                    shareUrl
+                                );
+                            } catch (err) {
+                                console.error("Failed to copy: ", err);
+                            }
+                        }}
                         variant="secondary"
                         text="Share Brain"
                         startIcon={<ShareIcon />}
                     />
                 </div>
 
-                <div className="flex gap-4 p-4">
-                    <Card
-                        type="twitter"
-                        link="https://x.com/SahilShangloo35/status/1865423830371700814"
-                        title="My Twitter Post"
-                    />
+                <div className="flex gap-4 p-4 flex-wrap">
+                    {contents.length > 0 ? (
+                        contents.map(({ title, link, type }, index) => (
+                            <Card
+                                key={index}
+                                type={type}
+                                link={link}
+                                title={title}
+                            />
+                        ))
+                    ) : (
+                        <p>No content available</p>
+                    )}
                 </div>
             </div>
         </div>
