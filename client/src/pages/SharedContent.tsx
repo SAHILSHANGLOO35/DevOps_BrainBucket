@@ -27,8 +27,8 @@ export function SharedContent() {
             <Sidebar />
             <div className="min-h-screen bg-gray-100 ml-60 border-2">
                 <div className="p-4">
-                    <h1 className="text-2xl font-bold mb-4 flex justify-center">
-                        Shared by {username.toUpperCase() || "Unknown User"}
+                    <h1 className="text-3xl font-bold tracking-wide mb-4 flex justify-center">
+                        Shared by <span className="pl-2 text-purple-900">{username.toUpperCase() || "Unknown User"}</span>
                     </h1>
                     <div className="flex gap-4 flex-wrap mt-10">
                         {contentList.length > 0 ? (

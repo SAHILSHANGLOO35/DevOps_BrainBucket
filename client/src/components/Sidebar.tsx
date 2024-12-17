@@ -11,7 +11,7 @@ export function Sidebar() {
                 <div className="cursor-pointer">
                     <BrainIcon />
                 </div>
-                <div>BrainBucket</div>
+                <div className="text-purple-900 font-bold">BrainBucket</div>
             </div>
             <div className="pl-6 pt-4">
                 <SideBarItem icon={<TwitterIcon />} text="Twitter" />
