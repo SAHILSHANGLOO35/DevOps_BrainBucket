@@ -80,7 +80,7 @@ export function Dashboard() {
                             />
                         ))
                     ) : (
-                        <p>No content available</p>
+                        <p>Add your important content here</p>
                     )}
                 </div>
             </div>
