@@ -1,13 +1,14 @@
-export function BrainIcon() {
+export function BrainIcon({ className }: { className?: string }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="#9670D7"
+            fill="currentColor"
             width="40px"
             height="40px"
             viewBox="0 0 64 64"
             data-name="Layer 1"
             id="Layer_1"
+            className={className}
         >
             <title />
             <path d="M21.46777,38.81689,20.35742,40.48a21.01258,21.01258,0,0,0,3.63037,1.9375l.76367-1.84863A18.9743,18.9743,0,0,1,21.46777,38.81689Z" />

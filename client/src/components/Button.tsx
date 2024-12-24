@@ -7,6 +7,7 @@ interface ButtonProps {
     onClick?: () => void;
     fullWidth?: boolean;
     loading?: boolean;
+    isDisabled?: boolean;
 }
 
 const variantClasses = {
@@ -24,6 +25,7 @@ export function Button({
     onClick,
     fullWidth,
     loading,
+    isDisabled,
 }: ButtonProps) {
     return (
         <button
@@ -31,7 +33,7 @@ export function Button({
             className={`${variantClasses[variant]} ${defaultStyles} ${
                 fullWidth ? "w-full justify-center items-center tracking-wider font-semibold" : ""
             } ${loading ? "opacity-45" : ""}`}
-            disabled={loading}
+            disabled={isDisabled==false ? !isDisabled : loading}
         >
             <div className="pr-2">{startIcon}</div>
             {text}

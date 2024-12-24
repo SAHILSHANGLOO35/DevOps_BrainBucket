@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CrossIcon } from "../icons/CrossIcon";
 import { Button } from "./Button";
 import { Input } from "./Input";
@@ -7,30 +7,48 @@ import { BACKEND_URL } from "../config";
 
 enum ContentType {
     Youtube = "youtube",
-    Twitter = "twitter",
+    Twitter = "twitter"
 }
 
 // Controlled component
 export function CreateContentModal({ open, onClose }) {
-    const titleRef = useRef<HTMLInputElement>();
-    const linkRef = useRef<HTMLInputElement>();
+    const titleRef = useRef<HTMLInputElement>(null);
     const [type, setType] = useState(ContentType.Youtube);
+    const [youtube, setYoutube] = useState(false);
+    const [twitter, setTwitter] = useState(false);
+    const [link, setLink] = useState(""); // State to track the link input value
 
     async function addContent() {
         const title = titleRef.current?.value;
-        const link = linkRef.current?.value;
 
-        await axios.post(`${BACKEND_URL}/api/v1/content`, {
-            title,
-            link,
-            type
-        }, {
-            headers: {
-                "Authorization": localStorage.getItem("token")
+        await axios.post(
+            `${BACKEND_URL}/api/v1/content`,
+            {
+                title,
+                link,
+                type
+            },
+            {
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                }
             }
-        })
+        );
         onClose();
     }
+
+    useEffect(() => {
+        if (link.includes("youtube")) {
+            setYoutube(true);
+            setTwitter(false);
+        } else if (link.includes("x")) {
+            setTwitter(true);
+            setYoutube(false);
+        } else {
+            setYoutube(false);
+            setTwitter(false);
+        }
+    }, [link]);
 
     return (
         <div>
@@ -42,17 +60,26 @@ export function CreateContentModal({ open, onClose }) {
                         <div className="flex flex-col justify-center">
                             <span className="bg-white p-4 rounded-md">
                                 <div className="flex justify-end">
-                                    <div
-                                        onClick={onClose}
-                                        className="cursor-pointer"
-                                    >
+                                    <div onClick={onClose} className="cursor-pointer">
                                         <CrossIcon />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <Input reference={titleRef} placeholder={"Title"} className="px-3 outline-purple-600 text-gray-500 font-medium" />
-                                    <Input reference={linkRef} placeholder={"Link"} className="px-3 outline-purple-600 text-gray-500 font-medium" />
+                                    {/* Title Input (Uncontrolled) */}
+                                    <Input
+                                        placeholder={"Title"}
+                                        reference={titleRef}
+                                        className="px-3 outline-purple-600 text-gray-500 font-medium"
+                                    />
+                                    
+                                    {/* Link Input (Controlled) */}
+                                    <Input
+                                        placeholder={"Link"}
+                                        value={link}
+                                        onChange={(e) => setLink(e.target.value)}
+                                        className="px-3 outline-purple-600 text-gray-500 font-medium"
+                                    />
                                 </div>
 
                                 <h1 className="pl-3 tracking-normal font-medium">Type</h1>
@@ -63,6 +90,7 @@ export function CreateContentModal({ open, onClose }) {
                                         onClick={() => {
                                             setType(ContentType.Youtube);
                                         }}
+                                        isDisabled={youtube}
                                     />
                                     <Button
                                         text="Twitter"
@@ -70,6 +98,7 @@ export function CreateContentModal({ open, onClose }) {
                                         onClick={() => {
                                             setType(ContentType.Twitter);
                                         }}
+                                        isDisabled={twitter}
                                     />
                                 </div>
 

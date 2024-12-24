@@ -12,6 +12,7 @@ import { BACKEND_URL } from "../config";
 export function Dashboard() {
     const [modalOpen, setModalOpen] = useState(false);
     const { contents, refresh } = useContent();
+    const [shareText, setShareText] = useState("Share Brain");
 
     useEffect(() => {
         refresh();
@@ -59,12 +60,17 @@ export function Dashboard() {
                                     "Content copied to clipboard",
                                     shareUrl
                                 );
+                                setShareText("Copied");
+
+                                setTimeout(() => {
+                                    setShareText("Share Brain")
+                                }, 3000);
                             } catch (err) {
                                 console.error("Failed to copy: ", err);
                             }
                         }}
                         variant="secondary"
-                        text="Share Brain"
+                        text={shareText}
                         startIcon={<ShareIcon />}
                     />
                 </div>
