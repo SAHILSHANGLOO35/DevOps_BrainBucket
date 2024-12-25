@@ -9,7 +9,7 @@ export function Sidebar() {
         <div className="h-screen bg-white border-r w-60 fixed left-0 top-0">
             <div className="flex text-2xl items-center pl-4 mt-2 mb-4  gap-2 font-semibold pt-2">
                 <div className="cursor-pointer">
-                    <BrainIcon />
+                    <BrainIcon className="text-purple-800" />
                 </div>
                 <div className="text-purple-900 font-bold">BrainBucket</div>
             </div>

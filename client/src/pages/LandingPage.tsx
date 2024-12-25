@@ -28,7 +28,7 @@ export default function LandingPage() {
             {/* Navigation */}
             <nav className="fixed top-0 left-0 right-0 bg-gray-900/40 backdrop-blur-sm border-b border-white/10 text-white lg:px-5 flex justify-between items-center z-50">
                 <div className="container mx-auto px-2 py-3 flex justify-between items-center">
-                    <div className="group flex items-center space-x-2 cursor-pointer text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-300 hover:text-white">
+                    <div className="group flex items-center space-x-2 cursor-pointer text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-800 hover:text-white">
                         <BrainIcon className="text-purple-300 group-hover:text-white transition-all duration-300" />
                         <div className="text-xl font-bold group-hover:text-white transition-all duration-300">
                             Brain Bucket
