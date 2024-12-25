@@ -5,11 +5,11 @@ export function SideBarItem({text, icon}: {
     icon: ReactElement
 }) {
     return (
-        <div className="flex items-center hover:bg-gray-200 rounded cursor-pointer max-w-44 hover:pl-4 transition-all duration-300">
-            <div className="p-2 text-gray-500">
+        <div className="flex items-center hover:bg-gray-800 rounded cursor-pointer max-w-44 hover:pl-4 transition-all duration-300">
+            <div className="p-2 text-gray-100">
                 {icon}
             </div>
-            <div className="p-2 text-gray-700">
+            <div className="p-2 text-gray-200">
                 {text}
             </div> 
         </div>

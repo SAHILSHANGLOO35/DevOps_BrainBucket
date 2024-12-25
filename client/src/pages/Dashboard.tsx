@@ -21,7 +21,7 @@ export function Dashboard() {
     return (
         <div>
             <Sidebar />
-            <div className="ml-60 min-h-screen bg-gray-100 border-2">
+            <div className="ml-60 min-h-screen bg-gradient-to-b from-gray-900 via-[#0B0B0F] to-gray-950">
                 <CreateContentModal
                     open={modalOpen}
                     onClose={() => {
