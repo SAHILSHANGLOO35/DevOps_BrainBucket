@@ -11,11 +11,11 @@ interface ButtonProps {
 }
 
 const variantClasses = {
-    primary: "bg-purple-600 text-white hover:bg-purple-500 transition-all duration-200",
-    secondary: "bg-purple-200 text-purple-600",
+    primary: "bg-purple-900 text-white hover:bg-purple-800 transition-all duration-200",
+    secondary: "bg-purple-300 text-purple-950 hover:bg-purple-400 hover:text-white transition-all duration-200",
 };
 
-const defaultStyles = "px-4 py-2 rounded-md font-normal flex items-center";
+const defaultStyles = "px-4 py-2 rounded-md font-semibold flex items-center";
 
 // destructuring props
 export function Button({

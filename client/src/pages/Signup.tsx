@@ -33,13 +33,13 @@ export function Signup() {
                     <div className="absolute top-8 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-10"></div>
                     <div className="absolute bottom-5 left-36 w-32 h-32 bg-purple-200 rounded-full opacity-10"></div>
                     
-                    <div className="text-7xl font-bold text-purple-800 tracking-wide flex justify-center mt-12">
+                    <div className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide flex justify-center mt-12">
                         BRAIN BUCKET
                     </div>
                     <div className="font-semibold text-lg flex justify-center items-center px-32 text-gray-300 mt-4">
                         Save your important links, notes, and ideas in one place. Brain Bucket – your go-to hub for everything you want to revisit later.
                     </div>
-                    <div className="flex ml-28 pl-2 mt-8 font-bold text-purple-800 tracking-wide text-3xl">
+                    <div className="flex ml-28 pl-2 mt-8 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide text-3xl">
                         Explore the Magic of <span className="font-extrabold ml-2 decoration-purple-800"><u className="underline-offset-4">BRAIN BUCKET</u></span>
                     </div>
                     <div className="flex flex-col mt-8 space-y-6 ml-28 pl-3">
@@ -48,8 +48,8 @@ export function Signup() {
                                 <Save size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Save Anything, Anytime</span>
-                                <span className="text-gray-300">Capture ideas and resources on the go</span>
+                                <span className="text-lg font-bold text-purple-300">Save Anything, Anytime</span>
+                                <span className="text-gray-400">Capture ideas and resources on the go</span>
                             </div>
                         </div>
 
@@ -58,8 +58,8 @@ export function Signup() {
                                 <FolderOpen size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Organized Storage</span>
-                                <span className="text-gray-300">Keep everything neatly categorized</span>
+                                <span className="text-lg font-bold text-purple-300">Organized Storage</span>
+                                <span className="text-gray-400">Keep everything neatly categorized</span>
                             </div>
                         </div>
 
@@ -68,8 +68,8 @@ export function Signup() {
                                 <Shield size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Secure and Private</span>
-                                <span className="text-gray-300">Your data is protected and encrypted</span>
+                                <span className="text-lg font-bold text-purple-300">Secure and Private</span>
+                                <span className="text-gray-400">Your data is protected and encrypted</span>
                             </div>
                         </div>
 
@@ -78,8 +78,8 @@ export function Signup() {
                                 <Share2 size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Collaborate and Share</span>
-                                <span className="text-gray-300">Work together with your team seamlessly</span>
+                                <span className="text-lg font-bold text-purple-300">Collaborate and Share</span>
+                                <span className="text-gray-400">Work together with your team seamlessly</span>
                             </div>
                         </div>
 
@@ -88,8 +88,8 @@ export function Signup() {
                                 <Gift size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Free to Use</span>
-                                <span className="text-gray-300">All features available at no cost</span>
+                                <span className="text-lg font-bold text-purple-300">Free to Use</span>
+                                <span className="text-gray-400">All features available at no cost</span>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@ export function Signup() {
                         borderBottomLeftRadius: "5rem",
                     }}
                 >
-                    <div className="text-5xl font-bold tracking-wider text-center mb-12 text-purple-700">
+                    <div className="text-5xl font-bold tracking-wider text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300">
                         Create Account
                     </div>
                     <div className="space-y-6">

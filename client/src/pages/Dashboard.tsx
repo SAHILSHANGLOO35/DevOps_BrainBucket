@@ -18,6 +18,10 @@ export function Dashboard() {
         refresh();
     }, [modalOpen]);
 
+    const handleDelete = () => {
+        refresh();
+    }
+
     return (
         <div>
             <Sidebar />
@@ -77,16 +81,18 @@ export function Dashboard() {
 
                 <div className="flex gap-4 p-4 flex-wrap">
                     {contents.length > 0 ? (
-                        contents.map(({ title, link, type }, index) => (
+                        contents.map(({ title, link, type, _id }) => (
                             <Card
-                                key={index}
+                                key={_id}
                                 type={type}
                                 link={link}
                                 title={title}
+                                contentId={_id}
+                                onDelete={handleDelete}
                             />
                         ))
                     ) : (
-                        <p>Add your important content here</p>
+                        <p className="text-white">Add your important content here</p>
                     )}
                 </div>
             </div>

@@ -143,9 +143,9 @@ app.get("/api/v1/content", userMiddleware, async (req, res) => {
 });
 
 // @ts-ignore
-app.delete("/api/v1/content", userMiddleware, async (req, res) => {
+app.delete("/api/v1/content/:contentId", userMiddleware, async (req, res) => {
     try {
-        const contentId = req.body.contentId;
+        const contentId = req.params.contentId;
         // @ts-ignore
         const userId = req.userId;
 

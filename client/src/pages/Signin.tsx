@@ -32,7 +32,7 @@ export function Signin() {
                     <div className="absolute top-8 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-10"></div>
                     <div className="absolute bottom-20 left-36 w-32 h-32 bg-purple-200 rounded-full opacity-10"></div>
                     
-                    <div className="text-7xl font-bold text-purple-800 tracking-wide flex justify-center mt-12">
+                    <div className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide flex justify-center mt-12">
                         BRAIN BUCKET
                     </div>
                     <div className="flex ml-28 pl-2 mt-8 font-bold text-purple-200 tracking-wide text-2xl">
@@ -44,7 +44,7 @@ export function Signin() {
                                 <Save size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Save Anything, Anytime</span>
+                                <span className="text-lg font-bold text-purple-300">Save Anything, Anytime</span>
                                 <span className="text-gray-400">Keep your links, tweets, and ideas safe in one place.</span>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ export function Signin() {
                                 <FolderOpen size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Organized Storage</span>
+                                <span className="text-lg font-bold text-purple-300">Organized Storage</span>
                                 <span className="text-gray-400">Access your neatly arranged content anytime.</span>
                             </div>
                         </div>
@@ -64,7 +64,7 @@ export function Signin() {
                                 <Shield size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Secure and Private</span>
+                                <span className="text-lg font-bold text-purple-300">Secure and Private</span>
                                 <span className="text-gray-400">Your data is protected with top-tier security.</span>
                             </div>
                         </div>
@@ -74,7 +74,7 @@ export function Signin() {
                                 <Share2 size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Collaborate and Share</span>
+                                <span className="text-lg font-bold text-purple-300">Collaborate and Share</span>
                                 <span className="text-gray-400">Share ideas and resources with ease.</span>
                             </div>
                         </div>
@@ -84,7 +84,7 @@ export function Signin() {
                                 <Gift size={24} className="text-purple-800" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold text-purple-800">Free to Use</span>
+                                <span className="text-lg font-bold text-purple-300">Free to Use</span>
                                 <span className="text-gray-400">All features, no cost. Always.</span>
                             </div>
                         </div>
@@ -97,7 +97,7 @@ export function Signin() {
                         borderBottomLeftRadius: "5rem",
                     }}
                 >
-                    <div className="text-5xl font-bold tracking-wide text-center mb-12 text-purple-700">
+                    <div className="text-5xl font-bold tracking-wide text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300">
                         Welcome Back!
                     </div>
                     <div className="space-y-6">

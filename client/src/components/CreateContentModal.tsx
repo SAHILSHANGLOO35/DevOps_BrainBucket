@@ -70,7 +70,7 @@ export function CreateContentModal({ open, onClose }) {
                                     <Input
                                         placeholder={"Title"}
                                         reference={titleRef}
-                                        className="px-3 outline-purple-600 text-gray-500 font-medium"
+                                        className="px-3 outline-purple-600 text-gray-800 font-medium"
                                     />
                                     
                                     {/* Link Input (Controlled) */}
@@ -78,7 +78,7 @@ export function CreateContentModal({ open, onClose }) {
                                         placeholder={"Link"}
                                         value={link}
                                         onChange={(e) => setLink(e.target.value)}
-                                        className="px-3 outline-purple-600 text-gray-500 font-medium"
+                                        className="px-3 outline-purple-600 text-gray-800 font-medium"
                                     />
                                 </div>
 
