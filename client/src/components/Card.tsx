@@ -67,7 +67,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                 <div className="pt-4">
                     {type === "youtube" && (
                         <iframe
-                            className="w-full border-0 rounded-md"
+                            className="w-full border-0 rounded-xl"
                             src={link
                                 .replace("watch", "embed")
                                 .replace("?v=", "/")}
@@ -80,9 +80,11 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     )}
 
                     {type === "twitter" && (
-                        <blockquote className="twitter-tweet">
-                            <a href={link.replace("x", "twitter")}></a>
-                        </blockquote>
+                        <div>
+                            <blockquote className="twitter-tweet">
+                                <a href={link.replace("x", "twitter")}></a>
+                            </blockquote>
+                        </div>
                     )}
                 </div>
             </div>
