@@ -7,10 +7,40 @@ import { ContentModel, UserModel, TagsModel, LinkModel } from "../src/db";
 import { userMiddleware } from "../src/middleware";
 import { random } from "./utils";
 import cors from "cors";
+import path from "path";
+import multer from "multer";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+// Multer configuration for handling PDF uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // Directory for uploaded PDFs
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = `${Date.now()}-${file.originalname}`;
+        cb(null, uniqueName);
+    },
+});
+
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        if (ext !== ".pdf") {
+            return cb(Error("Only PDFs are allowed"))
+        }
+        cb(null, true);
+    },
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limit size to 5MB
+    },
+});
 
 interface AuthenticatedRequest extends Request {
     userId?: string;
@@ -120,6 +150,37 @@ app.post("/api/v1/content", userMiddleware, async (req: AuthenticatedRequest, re
         }
     }
 );
+
+// @ts-ignore
+app.post("/api/v1/upload-pdf", userMiddleware, upload.single("pdf"), async (req, res) => {
+    try {
+        console.log("Uploaded File: ", req.file);
+
+        if (!req.file) {
+            return res.status(400).send({ message: "No file uploaded" });
+        }
+
+        const { title } = req.body;
+        const { type } = req.body;
+        const pdfPath = `/uploads/${req.file.filename}`;
+
+        const newContent = await ContentModel.create({
+            title: title || "My PDF",
+            pdfPath: pdfPath,
+            type: "pdf",
+            // @ts-ignore
+            userId: req.userId,
+        });
+
+        res.status(200).send({
+            message: "PDF uploaded successfully",
+            content: newContent,
+        });
+    } catch (error) {
+        console.error("Error uploading PDF:", error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+});
 
 // @ts-ignore
 app.get("/api/v1/content", userMiddleware, async (req, res) => {

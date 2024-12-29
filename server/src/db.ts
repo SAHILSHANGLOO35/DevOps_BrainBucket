@@ -28,7 +28,14 @@ const contentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tags'
     }],
-    type: String,
+    pdfPath: {
+        type: String,
+    },
+    type: {
+        type: String,
+        enum: ["youtube", "twitter", "pdf"],
+        required: true,
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
