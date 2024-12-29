@@ -57,6 +57,7 @@ export function Dashboard() {
                                         },
                                     }
                                 );
+                                // @ts-ignore
                                 const shareUrl = `http://localhost:5173/share/${response.data.hash}`;
 
                                 await navigator.clipboard.writeText(shareUrl);
@@ -81,7 +82,7 @@ export function Dashboard() {
 
                 <div className="flex gap-4 p-4 flex-wrap">
                     {contents.length > 0 ? (
-                        contents.map(({ title, link, type, _id }) => (
+                        contents.map(({ title, link, type, _id, pdfPath }) => (
                             <Card
                                 key={_id}
                                 type={type}
@@ -89,6 +90,7 @@ export function Dashboard() {
                                 title={title}
                                 contentId={_id}
                                 onDelete={handleDelete}
+                                pdfPath={pdfPath}
                             />
                         ))
                     ) : (

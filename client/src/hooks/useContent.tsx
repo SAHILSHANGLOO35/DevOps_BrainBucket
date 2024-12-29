@@ -12,6 +12,7 @@ export function useContent() {
             }
         }).then((response) => {
             console.log("Fetched contents:", response.data)
+            // @ts-ignore
             setContents(response.data.content)
         })
     }

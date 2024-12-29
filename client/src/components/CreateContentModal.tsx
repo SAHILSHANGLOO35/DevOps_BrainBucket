@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X, FileText, Upload } from "lucide-react";
+import { BACKEND_URL } from "../config";
+import axios from "axios";
 
 enum ContentType {
     Youtube = "youtube",
@@ -12,17 +14,71 @@ export function CreateContentModal({ open, onClose }) {
     const [title, setTitle] = useState("");
     const [link, setLink] = useState("");
     const [file, setFile] = useState<File | null>(null);
+    const titleRef = useRef<HTMLInputElement>(null);
+    const linkRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [youtube, setYoutube] = useState(false);
     const [twitter, setTwitter] = useState(false);
 
-    const handleSubmit = () => {
-        console.log("Form data:", { title, type, link: type === ContentType.PDF ? file?.name : link });
-        setTitle("");
-        setLink("");
-        setFile(null);
-        onClose();
-    };
+    async function addContent() {
+        const title = titleRef.current?.value?.trim();
+        const link = linkRef.current?.value?.trim();
+        const token = localStorage.getItem("token");
+    
+        if (!title) {
+            alert("Title is required!");
+            return;
+        }
+    
+        try {
+            if (type === ContentType.PDF && file) {
+                const formData = new FormData();
+                formData.append("pdf", file);
+                formData.append("title", title || "My PDF");
+                formData.append("type", ContentType.PDF);
+    
+                console.log("Uploading PDF:", { title, file, type: ContentType.PDF });
+    
+                await axios.post(`${BACKEND_URL}/api/v1/upload-pdf`, formData, {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+    
+                alert("PDF uploaded successfully");
+            } else if (type !== ContentType.PDF) {
+                if (!link) {
+                    alert("Link is required for YouTube or Twitter content!");
+                    return;
+                }
+    
+                console.log("Adding content:", { title, link, type });
+    
+                await axios.post(`${BACKEND_URL}/api/v1/content`, {
+                    title,
+                    link,
+                    type,
+                }, {
+                    headers: {
+                        "Authorization": token,
+                    },
+                });
+    
+                alert("Content added successfully");
+            }
+    
+            // Clear form and close modal
+            setTitle("");
+            setLink("");
+            setFile(null);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+            onClose();
+        } catch (error) {
+            console.error("Error adding content:", error);
+            alert("Failed to add content. Please try again.");
+        }
+    }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -67,6 +123,7 @@ export function CreateContentModal({ open, onClose }) {
                             <input
                                 type="text"
                                 value={title}
+                                ref={titleRef}
                                 onChange={(e) => setTitle(e.target.value)}
                                 className="w-full px-3 py-2 border rounded-md"
                                 placeholder="Enter title"
@@ -79,6 +136,7 @@ export function CreateContentModal({ open, onClose }) {
                                 <input
                                     type="text"
                                     value={link}
+                                    ref={linkRef}
                                     onChange={(e) => setLink(e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
                                     placeholder="Enter link"
@@ -139,7 +197,7 @@ export function CreateContentModal({ open, onClose }) {
                         </div>
 
                         <button
-                            onClick={handleSubmit}
+                            onClick={addContent}
                             className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700"
                         >
                             Submit
