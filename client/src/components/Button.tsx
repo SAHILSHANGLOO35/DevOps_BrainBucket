@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const variantClasses = {
     primary: "bg-purple-900 text-white hover:bg-purple-600 transition-all duration-200",
-    secondary: "bg-purple-300 text-purple-950 hover:bg-purple-400 hover:text-white transition-all duration-200",
+    secondary: "bg-purple-300 text-purple-950 hover:bg-gray-500 hover:text-white transition-all duration-300",
 };
 
 const defaultStyles = "px-4 py-2 rounded-md font-semibold flex items-center";
@@ -32,8 +32,8 @@ export function Button({
             onClick={onClick}
             className={`${variantClasses[variant]} ${defaultStyles} ${
                 fullWidth ? "w-full justify-center items-center tracking-wider font-semibold" : ""
-            } ${loading ? "opacity-45" : ""}`}
-            disabled={isDisabled==false ? !isDisabled : loading}
+            } ${loading || isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading || isDisabled}
         >
             <div className="pr-2">{startIcon}</div>
             {text}

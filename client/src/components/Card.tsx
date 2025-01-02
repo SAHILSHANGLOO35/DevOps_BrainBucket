@@ -69,7 +69,7 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
                 <div className="pt-4">
                     {type === "youtube" && (
                         <iframe
-                            className="w-full border-0 rounded-xl"
+                            className="w-full border-0 rounded-lg"
                             src={link.replace("watch", "embed").replace("?v=", "/")}
                             title="YouTube video player"
                             frameBorder="0"
