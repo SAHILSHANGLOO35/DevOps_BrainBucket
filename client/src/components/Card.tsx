@@ -5,6 +5,7 @@ import { TwitterIcon } from "../icons/TwitterIcon";
 import { YoutubeIcon } from "../icons/YoutubeIcon";
 import { BACKEND_URL } from "../config";
 import { DocumentIcon } from "../icons/DocumentIcon";
+import { useLocation } from "react-router-dom";
 
 interface CardProps {
     title: string;
@@ -12,8 +13,10 @@ interface CardProps {
     type: "youtube" | "twitter" | "pdf";
     contentId: string;
     pdfPath: string;
-    onDelete: () => void;
+    onDelete?: () => void;
 }
+
+// const location = useLocation();
 
 export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardProps) {
     const handleDelete = async () => {
@@ -39,6 +42,8 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
     // Dynamically generate PDF URL
     const pdfUrl = `${BACKEND_URL}${pdfPath}`;
 
+    const location = useLocation();
+
     return (
         <div>
             <div className="max-w-72 border rounded-md shadow-md border-gray-200/40 bg-gray-950/90 text-white p-4 min-h-48 min-w-72">
@@ -53,16 +58,44 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
                     </div>
                     <div className="flex items-center">
                         <div className="text-gray-800 pr-2 cursor-pointer">
-                            <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
-                                <EyeIcon />
-                            </a>
+                        {type === "youtube" && (
+                                <a
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <EyeIcon />
+                                </a>
+                            )}
+                            {type === "twitter" && (
+                                <a
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <EyeIcon />
+                                </a>
+                            )}
+                            {type === "pdf" && (
+                                <a
+                                    href={pdfUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <EyeIcon />
+                                </a>
+                            )}
                         </div>
-                        <div
-                            className="text-gray-800 cursor-pointer"
-                            onClick={handleDelete}
+
+                        {location.pathname === `/dashboard` && (
+                            <div
+                                className="text-gray-800 cursor-pointer"
+                                onClick={handleDelete}
                         >
                             <DeleteIcon />
                         </div>
+                        )}
+                        
                     </div>
                 </div>
 
