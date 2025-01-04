@@ -27,22 +27,22 @@ export function Signup() {
 
     return (
         <div>
-            <div className="min-h-screen bg-gradient-to-b from-gray-900 via-[#0B0B0F] to-gray-950 flex overflow-hidden">
-                <div className="flex flex-col w-1/2 relative">
+            <div className="min-h-screen bg-gradient-to-b from-gray-900 via-[#0B0B0F] to-gray-950 flex flex-col lg:flex-row overflow-hidden">
+                <div className="w-full lg:w-1/2 relative p-6 lg:p-0">
                     {/* Subtle shapes with matching colors */}
-                    <div className="absolute top-8 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-10"></div>
-                    <div className="absolute bottom-5 left-36 w-32 h-32 bg-purple-200 rounded-full opacity-10"></div>
+                    <div className="hidden lg:block absolute top-8 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-10"></div>
+                    <div className="hidden lg:block absolute bottom-5 left-36 w-32 h-32 bg-purple-200 rounded-full opacity-10"></div>
                     
-                    <div className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide flex justify-center mt-12">
+                    <div className="text-4xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide flex justify-center mt-6 lg:mt-12">
                         BRAIN BUCKET
                     </div>
-                    <div className="font-semibold text-lg flex justify-center items-center px-32 text-gray-300 mt-4">
+                    <div className="font-semibold text-base lg:text-lg text-center px-4 lg:px-32 text-gray-300 mt-4">
                         Save your important links, notes, and ideas in one place. Brain Bucket – your go-to hub for everything you want to revisit later.
                     </div>
-                    <div className="flex ml-28 pl-2 mt-8 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide text-3xl">
+                    <div className="text-center lg:text-left mt-8 px-4 lg:px-0 lg:ml-28 lg:pl-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 tracking-wide text-2xl lg:text-3xl">
                         Explore the Magic of <span className="font-extrabold ml-2 decoration-purple-800"><u className="underline-offset-4">BRAIN BUCKET</u></span>
                     </div>
-                    <div className="flex flex-col mt-8 space-y-6 ml-28 pl-3">
+                    <div className="flex flex-col mt-8 space-y-6 px-4 lg:px-0 lg:ml-28 lg:pl-3">
                         <div className="group flex items-start space-x-4 transition-all duration-300 hover:translate-x-2">
                             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-purple-900/10 group-hover:bg-purple-900/20 transition-colors">
                                 <Save size={24} className="text-purple-800" />
@@ -95,13 +95,13 @@ export function Signup() {
                     </div>
                 </div>
 
-                <div className="bg-gray-900/50 border-l border-white/20 backdrop-blur-lg w-1/2 p-12 ml-auto shadow-2xl"
+                <div className="w-full lg:w-1/2 p-6 lg:p-12 mt-8 lg:mt-0 bg-gray-900/50 backdrop-blur-lg lg:border-l border-white/20 lg:ml-auto shadow-2xl"
                     style={{
-                        borderTopLeftRadius: "5rem",
-                        borderBottomLeftRadius: "5rem",
+                        borderTopLeftRadius: window.innerWidth >= 350 ? "5rem" : "0",
+                        borderBottomLeftRadius: window.innerWidth >= 350 ? "5rem" : "0",
                     }}
                 >
-                    <div className="text-5xl font-bold tracking-wider text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300">
+                    <div className="text-4xl lg:text-5xl font-bold tracking-wider text-center mb-8 lg:mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300">
                         Create Account
                     </div>
                     <div className="space-y-6">
@@ -130,7 +130,7 @@ export function Signup() {
                             />
                         </div>
                     </div>
-                    <div className="mt-8 w-full ml-2">
+                    <div className="mt-8 w-full">
                         <Button
                             onClick={signup}
                             loading={false}

@@ -6,19 +6,32 @@ import { YoutubeIcon } from "../icons/YoutubeIcon";
 import { BACKEND_URL } from "../config";
 import { DocumentIcon } from "../icons/DocumentIcon";
 import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 interface CardProps {
     title: string;
-    link: string; // Link to the resource
+    link: string;
     type: "youtube" | "twitter" | "pdf";
     contentId: string;
     pdfPath: string;
     onDelete?: () => void;
 }
 
-// const location = useLocation();
-
 export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardProps) {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+
+        window.addEventListener('resize', checkMobile);
+
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -39,9 +52,7 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
         }
     };
 
-    // Dynamically generate PDF URL
     const pdfUrl = `${BACKEND_URL}${pdfPath}`;
-
     const location = useLocation();
 
     return (
@@ -58,7 +69,7 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
                     </div>
                     <div className="flex items-center">
                         <div className="text-gray-800 pr-2 cursor-pointer">
-                        {type === "youtube" && (
+                            {type === "youtube" && (
                                 <a
                                     href={link}
                                     target="_blank"
@@ -91,11 +102,10 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
                             <div
                                 className="text-gray-800 cursor-pointer"
                                 onClick={handleDelete}
-                        >
-                            <DeleteIcon />
-                        </div>
+                            >
+                                <DeleteIcon />
+                            </div>
                         )}
-                        
                     </div>
                 </div>
 
@@ -121,11 +131,27 @@ export function Card({ title, link, type, contentId, onDelete, pdfPath }: CardPr
                     )}
 
                     {type === "pdf" && (
-                        <iframe
-                            className="w-full h-96 border-0 rounded-xl"
-                            src={pdfUrl}
-                            title="PDF Viewer"
-                        ></iframe>
+                        <>
+                            {isMobile ? (
+                                <div className="flex flex-col items-center justify-center space-y-4 p-4">
+                                    <DocumentIcon />
+                                    <a
+                                        href={pdfUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition-colors"
+                                    >
+                                        Open PDF
+                                    </a>
+                                </div>
+                            ) : (
+                                <iframe
+                                    className="w-full h-96 border-0 rounded-xl"
+                                    src={pdfUrl}
+                                    title="PDF Viewer"
+                                ></iframe>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

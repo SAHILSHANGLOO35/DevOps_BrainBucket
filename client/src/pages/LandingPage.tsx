@@ -15,7 +15,6 @@ export default function LandingPage() {
 
     function createBucket() {
         const isLoggedIn = localStorage.getItem("token");
-
         if (isLoggedIn) {
             navigate("/dashboard");
         } else {
@@ -27,7 +26,7 @@ export default function LandingPage() {
         <div className="min-h-screen bg-gradient-to-b from-gray-950 via-[#0B0B0F] to-gray-950">
             {/* Navigation */}
             <nav className="fixed top-0 left-0 right-0 bg-gray-900/40 backdrop-blur-sm border-b border-white/10 text-white lg:px-5 flex justify-between items-center z-50">
-                <div className="container mx-auto px-2 py-3 flex justify-between items-center">
+                <div className="container mx-auto px-4 lg:px-2 py-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
                     <div className="group flex items-center space-x-2 cursor-pointer text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-800 hover:text-white">
                         <BrainIcon className="text-purple-300 group-hover:text-white transition-all duration-300" />
                         <div className="text-xl font-bold group-hover:text-white transition-all duration-300">
@@ -55,12 +54,12 @@ export default function LandingPage() {
             {/* Hero Section */}
             <main className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-gray-900/20" />
-                <div className="container mx-auto px-6 py-16 relative">
-                    <div className="text-center max-w-3xl mx-auto">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 mt-8">
+                <div className="container mx-auto px-4 lg:px-6 py-16 relative">
+                    <div className="text-center max-w-3xl mx-auto pt-10">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-200 to-purple-300 mt-8">
                             Your Digital Brain for Important Content
                         </h1>
-                        <p className="text-xl text-gray-300 mb-8">
+                        <p className="text-lg sm:text-xl text-gray-300 mb-8 px-4 sm:px-0">
                             Save, organize, and share your valuable online
                             content in one secure place.
                         </p>
@@ -73,7 +72,7 @@ export default function LandingPage() {
                     </div>
 
                     {/* Features Grid */}
-                    <div className="grid md:grid-cols-3 gap-6 mt-16">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-16">
                         <div className="p-6 bg-gradient-to-b from-gray-800 to-gray-800/50 rounded-lg backdrop-blur-sm border border-purple-900/20 hover:border-purple-700/50 transition">
                             <Link2 className="h-10 w-10 text-purple-400 mb-4" />
                             <h3 className="text-xl font-semibold mb-2 text-purple-200">
@@ -110,8 +109,8 @@ export default function LandingPage() {
 
             {/* Call to Action */}
             <section className="bg-gradient-to-b from-gray-800/50 to-purple-900/30 backdrop-blur-sm">
-                <div className="container mx-auto px-6 py-12 text-center">
-                    <h2 className="text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-200">
+                <div className="container mx-auto px-4 lg:px-6 py-12 text-center">
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-200">
                         Start Building Your Knowledge Base
                     </h2>
                     <p className="text-gray-300 mb-8">
@@ -127,9 +126,16 @@ export default function LandingPage() {
             </section>
 
             {/* Footer */}
-            <footer className=" border-t border-white/20 mx-auto px-6 py-12 text-gray-400 flex items-center justify-between">
-                <p>Reach me at: <a href="mailto:sahilshangloo35@gmail.com" className="hover:text-white transition-all">sahilshangloo35@gmail.com</a></p>
-                <p>© 2024 Brain Bucket. All rights reserved.</p>
+            <footer className="border-t border-white/20 px-4 lg:px-6 py-8 sm:py-12">
+                <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0 text-gray-400">
+                    <p className="text-center sm:text-left">
+                        Reach me at:{" "}
+                        <a href="mailto:sahilshangloo35@gmail.com" className="hover:text-white transition-all">
+                            sahilshangloo35@gmail.com
+                        </a>
+                    </p>
+                    <p className="text-center sm:text-left">© 2024 Brain Bucket. All rights reserved.</p>
+                </div>
             </footer>
         </div>
     );
