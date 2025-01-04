@@ -60,15 +60,17 @@ export function SharedContent() {
                     } border-b-2`}
                 >
                 </div>
-                <div className="p-4 pt-4">
-                    <h1 className={`p-2 fixed transition-all duration-300 text-white tracking-wide text-2xl font-bold flex justify-center ${
-                        isScrolled
-                            ? "top-4 flex justify-center"
-                            : "static text-2xl font-bold tracking-wide mb-4 flex justify-center"
-                    }`}
-                    >   
-                        Shared by <span className="pl-2 text-purple-700">{username.toUpperCase() || "Unknown User"}</span>
-                    </h1>
+                <div className="p-4">
+                    <div className=" flex items-center justify-center">
+                        <h1 className={`p-2 top-4 fixed transition-all duration-300 text-white tracking-wide text-2xl font-bold flex justify-center ${
+                            isScrolled
+                                ? "top-4 flex justify-center"
+                                : "static text-2xl font-bold tracking-wide mb-4 flex justify-center"
+                        }`}
+                        >   
+                            Shared by <span className="pl-2 text-purple-700">{username.toUpperCase() || "Unknown User"}</span>
+                        </h1>
+                    </div>
                     <div className="flex gap-4 flex-wrap mt-20">
                         {contentList.length > 0 ? (
                             filteredContents.map(({ title, link, type, _id, pdfPath }) => (
