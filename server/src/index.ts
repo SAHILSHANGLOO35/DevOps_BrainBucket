@@ -193,8 +193,6 @@ app.post("/api/v1/content", userMiddleware, async (req: AuthenticatedRequest, re
 // @ts-ignore
 app.post("/api/v1/upload-pdf", userMiddleware, upload.single("pdf"), async (req, res) => {
     try {
-        console.log("Uploaded File: ", req.file);
-
         if (!req.file) {
             return res.status(400).send({ message: "No file uploaded" });
         }
