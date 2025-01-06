@@ -1,17 +1,18 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import { SharedContent } from "./pages/SharedContent";
 import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
+import UnauthorizedAccess from "./components/UnauthorizedAccess";
 
 const isAuthenticated = () => {
     return !!localStorage.getItem("token");
 };
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    return isAuthenticated() ? children : <Navigate to="/signin" />;
+    return isAuthenticated() ? children : <UnauthorizedAccess />;
 };
 
 function App() {
