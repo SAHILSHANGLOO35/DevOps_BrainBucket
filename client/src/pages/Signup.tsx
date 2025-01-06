@@ -5,6 +5,7 @@ import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Save, FolderOpen, Shield, Share2, Gift } from 'lucide-react';
+import { toast, Toaster } from "react-hot-toast";
 
 export function Signup() {
     const usernameRef = useRef<HTMLInputElement>();
@@ -13,20 +14,34 @@ export function Signup() {
     const navigate = useNavigate();
 
     async function signup() {
-        const username = usernameRef.current?.value;
-        const password = passwordRef.current?.value;
-        const email = emailRef.current?.value;
-        await axios
-            .post(`${BACKEND_URL}/api/v1/signup`, {
+        try {
+            const username = usernameRef.current?.value;
+            const password = passwordRef.current?.value;
+            const email = emailRef.current?.value;
+
+            await axios.post(`${BACKEND_URL}/api/v1/signup`, {
                 username,
                 password,
                 email,
-            })
-            .then(() => navigate(`/signin`));
+            });
+            navigate(`/signin`);
+            
+        } catch (error: any) {
+            if (error.response?.data?.errors) {
+                error.response.data.errors.forEach((err: any) => {
+                    toast.error(err.message);
+                });
+            } else if (error.response?.data?.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error('Something went wrong. Please try again.');
+            }
+        }
     }
 
     return (
         <div>
+            <Toaster position="top-right" />
             <div className="min-h-screen bg-gradient-to-b from-gray-900 via-[#0B0B0F] to-gray-950 flex flex-col lg:flex-row overflow-hidden">
                 <div className="w-full lg:w-1/2 relative p-6 lg:p-0">
                     {/* Subtle shapes with matching colors */}
@@ -117,6 +132,7 @@ export function Signup() {
                             <label className="text-sm font-medium text-gray-300 pl-2">Email</label>
                             <Input
                                 reference={emailRef}
+                                type="email"
                                 placeholder="Enter your email"
                                 className="w-full px-4 py-3 bg-gray-800/50 border border-purple-900/20 text-gray-200 placeholder-gray-500 font-medium outline-none focus:border-purple-900 transition duration-200 rounded-lg"
                             />
@@ -125,6 +141,7 @@ export function Signup() {
                             <label className="text-sm font-medium text-gray-300 pl-2">Password</label>
                             <Input
                                 reference={passwordRef}
+                                type="password"
                                 placeholder="Enter your password"
                                 className="w-full px-4 py-3 bg-gray-800/50 border border-purple-900/20 text-gray-200 placeholder-gray-500 font-medium outline-none focus:border-purple-900 transition duration-200 rounded-lg"
                             />

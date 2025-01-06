@@ -52,9 +52,7 @@ export function CreateContentModal({ open, onClose }) {
                     alert("Link is required for YouTube or Twitter content!");
                     return;
                 }
-    
-                console.log("Adding content:", { title, link, type });
-    
+        
                 await axios.post(`${BACKEND_URL}/api/v1/content`, {
                     title,
                     link,

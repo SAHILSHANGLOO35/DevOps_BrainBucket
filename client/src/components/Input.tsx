@@ -3,14 +3,15 @@ interface InputProps {
     reference?: any; // Specify the correct type for refs
     className?: string;
     value?: string; // Optional value prop for controlled components
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Optional onChange handler
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    type?: string;
 }
 
-export function Input({ placeholder, reference, className, value, onChange }: InputProps) {
+export function Input({ type="text", placeholder, reference, className, value, onChange }: InputProps) {
     return (
         <div>
             <input
-                type="text"
+                type={type}
                 placeholder={placeholder}
                 ref={reference}
                 value={value} // Allows controlled usage
