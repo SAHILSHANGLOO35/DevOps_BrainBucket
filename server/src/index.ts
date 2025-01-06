@@ -9,6 +9,7 @@ import { random } from "./utils";
 import cors from "cors";
 import path from "path";
 import multer from "multer";
+import { z } from "zod";
 
 const app = express();
 app.use(express.json());
@@ -51,45 +52,83 @@ interface AuthenticatedRequest extends Request {
     };
 }
 
-//@ts-ignore
-app.post("/api/v1/signup", async (req, res) => {
+const signupSchema = z.object({
+    username: z
+      .string()
+      .min(4, "Username must be at least 4 characters")
+      .max(50, "Username cannot exceed 50 characters"),
+    email: z
+      .string()
+      .email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters"),
+  });
+  
+  //@ts-ignore
+  app.post("/api/v1/signup", async (req, res) => {
+      try {
+          const result = signupSchema.safeParse(req.body);
+          
+          if (!result.success) {
+              return res.status(400).json({
+                  message: "Validation failed",
+                  errors: result.error.errors
+              });
+          }
+  
+          const { username, email, password } = result.data;
+  
+          const existingUser = await UserModel.findOne({ email });
+  
+          if (existingUser) {
+              return res.status(403).json({
+                  message: "User already exists!",
+              });
+          }
+  
+          const hashedPassword = await bcrypt.hash(password, 10);
+  
+          const newUser = await UserModel.create({
+              username,
+              email,
+              password: hashedPassword,
+          });
+  
+          res.status(200).json({
+              message: "User created successfully",
+              user: newUser,
+          });
+      } catch (error) {
+          console.error("Error creating user:", error);
+          res.status(500).json({
+              message: "Internal server error",
+          });
+      }
+  });
+
+  const signinSchema = z.object({
+    email: z
+        .string()
+        .email("Invalid email format"),
+    password: z
+        .string()
+        .min(1, "Password is required")
+});
+
+// @ts-ignore
+app.post("/api/v1/signin", async (req, res) => {
     try {
-        const username = req.body.username;
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const existingUser = await UserModel.findOne({ email });
-
-        if (existingUser) {
-            return res.status(403).send({
-                message: "User already exists!",
+        const result = signinSchema.safeParse(req.body);
+        
+        if (!result.success) {
+            return res.status(400).send({
+                message: "Validation failed",
+                errors: result.error.errors
             });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = await UserModel.create({
-            username,
-            email,
-            password: hashedPassword,
-        });
-
-        res.status(200).send({
-            message: "User created successfully",
-            user: newUser,
-        });
-    } catch (error) {
-        console.error("Error creating user:", error);
-        res.status(500).send({
-            message: "Internal server error",
-        });
-    }
-});
-
-app.post("/api/v1/signin", async (req, res) => {
-    try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = result.data;
 
         const user = await UserModel.findOne({ email });
 
@@ -108,7 +147,7 @@ app.post("/api/v1/signin", async (req, res) => {
         if (matchPassword) {
             const token = jwt.sign(
                 { id: user._id },
-                process.env.JWT_USER_SECRET as string // Force it to be treated as a string
+                process.env.JWT_USER_SECRET as string
             );
 
             res.status(200).send({
