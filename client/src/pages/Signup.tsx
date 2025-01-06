@@ -41,7 +41,9 @@ export function Signup() {
 
     return (
         <div>
-            <Toaster position="top-right" />
+            <div className="z-50">
+                <Toaster position="top-right" />
+            </div>
             <div className="min-h-screen bg-gradient-to-b from-gray-900 via-[#0B0B0F] to-gray-950 flex flex-col lg:flex-row overflow-hidden">
                 <div className="w-full lg:w-1/2 relative p-6 lg:p-0">
                     {/* Subtle shapes with matching colors */}

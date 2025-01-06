@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { X, FileText, Upload } from "lucide-react";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
+import { toast, Toaster } from "react-hot-toast";
 
 enum ContentType {
     Youtube = "youtube",
@@ -26,7 +27,7 @@ export function CreateContentModal({ open, onClose }) {
         const token = localStorage.getItem("token");
     
         if (!title) {
-            alert("Title is required!");
+            toast.error("Title is required!");
             return;
         }
     
@@ -36,9 +37,7 @@ export function CreateContentModal({ open, onClose }) {
                 formData.append("pdf", file);
                 formData.append("title", title || "My PDF");
                 formData.append("type", ContentType.PDF);
-    
-                console.log("Uploading PDF:", { title, file, type: ContentType.PDF });
-    
+        
                 await axios.post(`${BACKEND_URL}/api/v1/upload-pdf`, formData, {
                     headers: {
                         "Authorization": token,
@@ -46,10 +45,10 @@ export function CreateContentModal({ open, onClose }) {
                     },
                 });
     
-                alert("PDF uploaded successfully");
+                toast.success("PDF uploaded successfully");
             } else if (type !== ContentType.PDF) {
                 if (!link) {
-                    alert("Link is required for YouTube or Twitter content!");
+                    toast.error("Link is required for YouTube or Twitter content!");
                     return;
                 }
         
@@ -63,7 +62,7 @@ export function CreateContentModal({ open, onClose }) {
                     },
                 });
     
-                alert("Content added successfully");
+                toast.success("Content added successfully");
             }
     
             // Clear form and close modal
@@ -74,7 +73,7 @@ export function CreateContentModal({ open, onClose }) {
             onClose();
         } catch (error) {
             console.error("Error adding content:", error);
-            alert("Failed to add content. Please try again.");
+            toast.error("Failed to add content. Please try again.");
         }
     }
 
@@ -105,6 +104,7 @@ export function CreateContentModal({ open, onClose }) {
 
     return (
         <div className="fixed inset-0 z-50">
+            <Toaster position="top-right" />
             <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose} />
             <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
                 <div className="bg-white rounded-lg w-96 p-6 pointer-events-auto">

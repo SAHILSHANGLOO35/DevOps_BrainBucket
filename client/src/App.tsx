@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import { SharedContent } from "./pages/SharedContent";
 import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
+import { Toaster } from "react-hot-toast";
 
 const isAuthenticated = () => {
     return !!localStorage.getItem("token");
@@ -16,6 +17,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 function App() {
     return (
         <BrowserRouter>
+            <Toaster position="top-right" />
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<LandingPage />} />
