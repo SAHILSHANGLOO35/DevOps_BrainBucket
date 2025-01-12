@@ -12,12 +12,27 @@ import multer from "multer";
 import { z } from "zod";
 
 const app = express();
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
-app.use(cors());
+app.use(
+    cors({
+        origin: ["http://localhost:5173", "https://brainbucket.tech"],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        maxAge: 600,
+    })
+);
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Serve uploaded files
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use(
+    "/uploads",
+    (req, res, next) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        next();
+    },
+    express.static(path.join(__dirname, "../uploads"))
+);
 
 // Multer configuration for handling PDF uploads
 const storage = multer.diskStorage({
@@ -35,12 +50,12 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         if (ext !== ".pdf") {
-            return cb(Error("Only PDFs are allowed"))
+            return cb(Error("Only PDFs are allowed"));
         }
         cb(null, true);
     },
     limits: {
-        fileSize: 5 * 1024 * 1024, // Limit size to 5MB
+        fileSize: 10 * 1024 * 1024, // Limit size to 5MB
     },
 });
 
@@ -55,77 +70,69 @@ interface AuthenticatedRequest extends Request {
 
 const signupSchema = z.object({
     username: z
-      .string()
-      .min(4, "Username must be at least 4 characters")
-      .max(50, "Username cannot exceed 50 characters"),
-    email: z
-      .string()
-      .email("Invalid email address"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters"),
-  });
-  
-  //@ts-ignore
-  app.post("/api/v1/signup", async (req, res) => {
-      try {
-          const result = signupSchema.safeParse(req.body);
-          
-          if (!result.success) {
-              return res.status(400).json({
-                  message: "Validation failed",
-                  errors: result.error.errors
-              });
-          }
-  
-          const { username, email, password } = result.data;
-  
-          const existingUser = await UserModel.findOne({ email });
-  
-          if (existingUser) {
-              return res.status(403).json({
-                  message: "User already exists!",
-              });
-          }
-  
-          const hashedPassword = await bcrypt.hash(password, 10);
-  
-          const newUser = await UserModel.create({
-              username,
-              email,
-              password: hashedPassword,
-          });
-  
-          res.status(200).json({
-              message: "User created successfully",
-              user: newUser,
-          });
-      } catch (error) {
-          console.error("Error creating user:", error);
-          res.status(500).json({
-              message: "Internal server error",
-          });
-      }
-  });
+        .string()
+        .min(4, "Username must be at least 4 characters")
+        .max(50, "Username cannot exceed 50 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+});
 
-  const signinSchema = z.object({
-    email: z
-        .string()
-        .email("Invalid email format"),
-    password: z
-        .string()
-        .min(1, "Password is required")
+//@ts-ignore
+app.post("/api/v1/signup", async (req, res) => {
+    try {
+        const result = signupSchema.safeParse(req.body);
+
+        if (!result.success) {
+            return res.status(400).json({
+                message: "Validation failed",
+                errors: result.error.errors,
+            });
+        }
+
+        const { username, email, password } = result.data;
+
+        const existingUser = await UserModel.findOne({ email });
+
+        if (existingUser) {
+            return res.status(403).json({
+                message: "User already exists!",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await UserModel.create({
+            username,
+            email,
+            password: hashedPassword,
+        });
+
+        res.status(200).json({
+            message: "User created successfully",
+            user: newUser,
+        });
+    } catch (error) {
+        console.error("Error creating user:", error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+
+const signinSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(1, "Password is required"),
 });
 
 // @ts-ignore
 app.post("/api/v1/signin", async (req, res) => {
     try {
         const result = signinSchema.safeParse(req.body);
-        
+
         if (!result.success) {
             return res.status(400).send({
                 message: "Validation failed",
-                errors: result.error.errors
+                errors: result.error.errors,
             });
         }
 
@@ -168,57 +175,79 @@ app.post("/api/v1/signin", async (req, res) => {
 
 // @ts-ignore
 app.post("/api/v1/content", userMiddleware, async (req: AuthenticatedRequest, res) => {
-        try {
-            const title = req.body.title;
-            const link = req.body.link;
-            const type = req.body.type;
+    try {
+        const title = req.body.title;
+        const link = req.body.link;
+        const type = req.body.type;
 
-            await ContentModel.create({
-                title,
-                link,
-                type,
-                userId: req.userId,
-                tags: [],
-            });
-            return res.status(200).send({
-                message: "Content added successfully!",
-            });
-        } catch (error) {
-            res.status(403).send({
-                message: "Internal server error",
-            });
-        }
+        await ContentModel.create({
+            title,
+            link,
+            type,
+            userId: req.userId,
+            tags: [],
+        });
+        return res.status(200).send({
+            message: "Content added successfully!",
+        });
+    } catch (error) {
+        res.status(403).send({
+            message: "Internal server error",
+        });
+    }
     }
 );
 
 // @ts-ignore
-app.post("/api/v1/upload-pdf", userMiddleware, upload.single("pdf"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).send({ message: "No file uploaded" });
+app.post("/api/v1/upload-pdf", userMiddleware,(req, res, next) => {
+    upload.single("pdf")(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            if (err.code === "LIMIT_FILE_SIZE") {
+                return res.status(413).json({
+                    message: "File is too large. Maximum size is 10MB",
+                });
+            }
+            return res.status(400).json({
+                message: `Upload error: ${err.message}`,
+            });
+        } else if (err) {
+            return res.status(400).json({
+                message: err.message,
+            });
         }
+        next();
+    });
+    },
+    async (req: Request, res: Response) => {
+        try {
+            if (!req.file) {
+                return res.status(400).json({
+                    message: "No file uploaded",
+                });
+            }
 
-        const { title } = req.body;
-        const { type } = req.body;
-        const pdfPath = `/uploads/${req.file.filename}`;
+            const { title = "My PDF", type = "pdf" } = req.body;
+            const pdfPath = `/uploads/${req.file.filename}`;
 
-        const newContent = await ContentModel.create({
-            title: title || "My PDF",
-            pdfPath: pdfPath,
-            type: "pdf",
-            // @ts-ignore
-            userId: req.userId,
-        });
+            const newContent = await ContentModel.create({
+                title,
+                pdfPath,
+                type,
+                userId: (req as any).userId,
+            });
 
-        res.status(200).send({
-            message: "PDF uploaded successfully",
-            content: newContent,
-        });
-    } catch (error) {
-        console.error("Error uploading PDF:", error);
-        res.status(500).send({ message: "Internal server error" });
+            res.status(200).json({
+                message: "PDF uploaded successfully",
+                content: newContent,
+            });
+        } catch (error) {
+            console.error("Error uploading PDF:", error);
+            res.status(500).json({
+                message: "Internal server error during file processing",
+            });
+        }
     }
-});
+);
 
 // @ts-ignore
 app.get("/api/v1/content", userMiddleware, async (req, res) => {
@@ -282,24 +311,24 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
         if (share) {
             const existingLink = await LinkModel.findOne({
                 // @ts-ignore
-                userId: req.userId
+                userId: req.userId,
             });
 
-            if(existingLink) {
+            if (existingLink) {
                 return res.json({
-                    hash: existingLink.hash
+                    hash: existingLink.hash,
                 });
             }
 
             const hash = random(10);
-            
+
             await LinkModel.create({
                 // @ts-ignore
                 userId: req.userId,
                 hash: hash,
             });
             return res.json({
-                hash: hash
+                hash: hash,
             });
         } else {
             await LinkModel.deleteOne({
@@ -312,7 +341,7 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
 });
@@ -353,10 +382,15 @@ app.get("/api/v1/brain/:shareLink", async (req, res) => {
 });
 
 async function main() {
-    await mongoose.connect(process.env.MONGODB_URI as string);
-    app.listen(process.env.PORT, () => {
-        console.log("SERVER STARTED ON PORT", process.env.PORT);
-    });
+    try {
+        await mongoose.connect(process.env.MONGODB_URI as string);
+        app.listen(process.env.PORT, () => {
+            console.log("Server started on port", process.env.PORT);
+        });
+    } catch (error) {
+        console.error("Error connecting to the database:", error);
+        process.exit(1);
+    }
 }
 
 main();
