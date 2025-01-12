@@ -180,7 +180,7 @@ app.post("/api/v1/content", userMiddleware, async (req: AuthenticatedRequest, re
                 userId: req.userId,
                 tags: [],
             });
-            res.status(200).send({
+            return res.status(200).send({
                 message: "Content added successfully!",
             });
         } catch (error) {
@@ -276,40 +276,45 @@ app.delete("/api/v1/content/:contentId", userMiddleware, async (req, res) => {
 
 // @ts-ignore
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
-    const share = req.body.share;
+    try {
+        const share = req.body.share;
 
-    if (share) {
-        const existingLink = await LinkModel.findOne({
-            // @ts-ignore
-            userId: req.userId
-        })
+        if (share) {
+            const existingLink = await LinkModel.findOne({
+                // @ts-ignore
+                userId: req.userId
+            });
 
-        if(existingLink) {
-            res.send({
-                hash: existingLink.hash
-            })
-            return;
+            if(existingLink) {
+                return res.json({
+                    hash: existingLink.hash
+                });
+            }
+
+            const hash = random(10);
+            
+            await LinkModel.create({
+                // @ts-ignore
+                userId: req.userId,
+                hash: hash,
+            });
+            return res.json({
+                hash: hash
+            });
+        } else {
+            await LinkModel.deleteOne({
+                // @ts-ignore
+                userId: req.userId,
+            });
+            return res.json({
+                message: "Removed link",
+            });
         }
-
-        const hash = random(10);
-        
-        await LinkModel.create({
-            // @ts-ignore
-            userId: req.userId,
-            hash: hash,
-        });
-        res.send({
-            hash: hash
-        });
-    } else {
-        await LinkModel.deleteOne({
-            // @ts-ignore
-            userId: req.userId,
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error"
         });
     }
-    res.send({
-        message: "Removed link",
-    });
 });
 
 // @ts-ignore
