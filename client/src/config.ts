@@ -1,2 +1,2 @@
-export const BACKEND_URL = "https://server.brainbucket.tech"
+export const BACKEND_URL = "https://api.brainbucket.tech"
 
