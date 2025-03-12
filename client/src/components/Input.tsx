@@ -14,7 +14,7 @@ export function Input({ type="text", placeholder, reference, className, value, o
                 type={type}
                 placeholder={placeholder}
                 ref={reference}
-                value={value} // Allows controlled usage
+                value={value}
                 onChange={onChange} // Allows controlled usage
                 className={`text-start py-2 border shadow rounded m-2 ${className || ""}`}
             />
