@@ -3,13 +3,15 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import { ContentModel, UserModel, TagsModel, LinkModel } from "../src/db";
-import { userMiddleware } from "../src/middleware";
+import { ContentModel, UserModel, TagsModel, LinkModel } from "./db";
+import { userMiddleware } from "./middleware";
 import { random } from "./utils";
 import cors from "cors";
 import path from "path";
 import multer from "multer";
 import { z } from "zod";
+
+
 
 const app = express();
 app.use(
@@ -33,6 +35,12 @@ app.use(
     },
     express.static(path.join(__dirname, "../uploads"))
 );
+
+app.use("/", (req, res) => {
+    res.send({
+        message: `BE UP`
+    })
+})
 
 // Multer configuration for handling PDF uploads
 const storage = multer.diskStorage({
