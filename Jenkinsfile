@@ -60,15 +60,16 @@ pipeline {
                                 sudo docker run -d --name brainbucket-backend -p 8000:8000 ${img}
                             """
 
-                            // Write deploy script to file
+                            // Write deploy commands to file
                             writeFile file: 'deploy-commands.sh', text: deployScript
                         }
 
-                        // Fix SSH permissions on private key
+                        // Fix private key permissions
                         bat """
                             icacls "${SSH_KEY}" /inheritance:r
-                            icacls "${SSH_KEY}" /remove:g BUILTIN\\Users
-                            icacls "${SSH_KEY}" /grant:r "%USERNAME%":F
+                            icacls "${SSH_KEY}" /remove:g "NT AUTHORITY\\Authenticated Users"
+                            icacls "${SSH_KEY}" /remove:g "BUILTIN\\Users"
+                            icacls "${SSH_KEY}" /grant:r "%USERNAME%:R"
                         """
 
                         // Copy deploy script to EC2
