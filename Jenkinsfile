@@ -23,14 +23,6 @@ pipeline {
             }
         }
 
-        stage('Generate Prisma Client') {
-            steps {
-                dir('server') {
-                    bat 'npx prisma generate'
-                }
-            }
-        }
-
         stage('Run Tests') {
             steps {
                 dir('server') {
