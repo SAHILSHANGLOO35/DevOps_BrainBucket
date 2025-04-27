@@ -36,12 +36,6 @@ app.use(
     express.static(path.join(__dirname, "../uploads"))
 );
 
-app.use("/", (req, res) => {
-    res.send({
-        message: `BE UP`
-    })
-})
-
 // Multer configuration for handling PDF uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
