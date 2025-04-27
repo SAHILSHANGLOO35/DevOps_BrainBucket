@@ -48,33 +48,39 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    script {
-                def img = "${DOCKER_USER}/${IMAGE_NAME}:latest"
-                def deployScript = """
-                #!/bin/bash
-                echo '${DOCKER_PASS}' | sudo docker login -u ${DOCKER_USER} --password-stdin
-                sudo docker pull ${img}
-                sudo docker stop brainbucket-backend || true
-                sudo docker rm brainbucket-backend || true
-                sudo docker run -d --name brainbucket-backend -p 8000:8000 ${img}
-                """
+                    dir('server') {
+                        script {
+                            def img = "${DOCKER_USER}/${IMAGE_NAME}:latest"
+                            def deployScript = """
+                                #!/bin/bash
+                                echo '${DOCKER_PASS}' | sudo docker login -u ${DOCKER_USER} --password-stdin
+                                sudo docker pull ${img}
+                                sudo docker stop brainbucket-backend || true
+                                sudo docker rm brainbucket-backend || true
+                                sudo docker run -d --name brainbucket-backend -p 8000:8000 ${img}
+                            """
 
-                // Save deploy script
-                writeFile file: 'deploy-commands.sh', text: deployScript
+                            // Write deploy script to file
+                            writeFile file: 'deploy-commands.sh', text: deployScript
+                        }
 
-                // Fix SSH permissions on private key (Windows icacls)
-                bat """
-                icacls \"${SSH_KEY}\" /inheritance:r
-                icacls \"${SSH_KEY}\" /remove:g BUILTIN\\Users
-                icacls \"${SSH_KEY}\" /grant:r \"%USERNAME%\":F
-                """
+                        // Fix SSH permissions on private key
+                        bat """
+                            icacls "${SSH_KEY}" /inheritance:r
+                            icacls "${SSH_KEY}" /remove:g BUILTIN\\Users
+                            icacls "${SSH_KEY}" /grant:r "%USERNAME%":F
+                        """
 
-                // Copy deploy script to EC2
-                bat "scp -o StrictHostKeyChecking=no -i \"${SSH_KEY}\" deploy-commands.sh ${EC2_USER}@${EC2_HOST}:/home/${EC2_USER}/deploy-commands.sh"
+                        // Copy deploy script to EC2
+                        bat """
+                            scp -o StrictHostKeyChecking=no -i "${SSH_KEY}" deploy-commands.sh ${EC2_USER}@${EC2_HOST}:/home/${EC2_USER}/deploy-commands.sh
+                        """
 
-                // Execute deploy script on EC2
-                bat "ssh -o StrictHostKeyChecking=no -i \"${SSH_KEY}\" ${EC2_USER}@${EC2_HOST} \"chmod +x /home/${EC2_USER}/deploy-commands.sh && /home/${EC2_USER}/deploy-commands.sh\""
-            }
+                        // Execute deploy script on EC2
+                        bat """
+                            ssh -o StrictHostKeyChecking=no -i "${SSH_KEY}" ${EC2_USER}@${EC2_HOST} "chmod +x /home/${EC2_USER}/deploy-commands.sh && /home/${EC2_USER}/deploy-commands.sh"
+                        """
+                    }
                 }
             }
         }
