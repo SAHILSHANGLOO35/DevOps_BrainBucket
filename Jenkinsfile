@@ -46,9 +46,9 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
-    steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-            script {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    script {
                 def img = "${DOCKER_USER}/${IMAGE_NAME}:latest"
                 def deployScript = """
                 #!/bin/bash
@@ -75,18 +75,20 @@ pipeline {
                 // Execute deploy script on EC2
                 bat "ssh -o StrictHostKeyChecking=no -i \"${SSH_KEY}\" ${EC2_USER}@${EC2_HOST} \"chmod +x /home/${EC2_USER}/deploy-commands.sh && /home/${EC2_USER}/deploy-commands.sh\""
             }
+                }
+            }
         }
     }
-}
 
-post {
-    always {
-        echo 'Pipeline execution completed.'
-    }
-    success {
-        echo '✅ Pipeline succeeded! App is deployed.'
-    }
-    failure {
-        echo '❌ Pipeline failed! Check logs.'
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+        success {
+            echo '✅ Pipeline succeeded! App is deployed.'
+        }
+        failure {
+            echo '❌ Pipeline failed! Check logs.'
+        }
     }
 }
